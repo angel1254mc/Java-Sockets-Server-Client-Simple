@@ -10,25 +10,34 @@ import java.net.*;
 public class Client {
 
     Socket clientSocket;
-    PrintWriter output;
-    BufferedReader input;
+    DataOutputStream output;
+    DataInputStream input;
+    BufferedReader terminalInput;
 
-    public Client(int port) throws IOException {
-        clientSocket = new Socket("127.0.0.1", port);
-        System.out.println("Client instantiated");
-        output = new PrintWriter(clientSocket.getOutputStream());
+    
+    public Client(String IP, int port) throws IOException {
+        clientSocket = new Socket(IP, port);
 
-        input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        output =  new DataOutputStream(clientSocket.getOutputStream());
+        input = new DataInputStream(clientSocket.getInputStream());
+        terminalInput = new BufferedReader(new InputStreamReader(System.in));
         String fromServer;
         String fromUser;
+
         // Get the input from the server and run our program based on that, since
         // the program itself ends when the server replies to a "Bye" with "disconnected"
-        while ((fromServer = input.readLine()) != "disconnected") {
-            if (fromServer != null)
-                System.out.println(fromServer);
-            fromUser = input.readLine();
-            output.println(fromUser);
+
+        fromUser = terminalInput.readLine();
+        while (true) {
+            output.writeUTF(fromUser);
+            fromServer = input.readUTF();
+            if (fromServer.equals("disconnected"))
+                break;
+            System.out.println("Server Response looks like: " + fromServer);
+            fromUser = terminalInput.readLine();
         }
+        System.out.println("Closing client");
+        output.writeUTF("Client left");
         input.close();
         output.close();
         clientSocket.close();
@@ -36,8 +45,9 @@ public class Client {
     }    
     public static void main(String[] args) {
         try {
-            Client client = new Client(4200);
+            Client client = new Client("localhost", 4200);
         } catch(IOException error) {
+            System.out.println("There was an error???");
             System.out.println(error.getMessage());
         }
     }
