@@ -30,10 +30,14 @@ public class Client {
         fromUser = terminalInput.readLine();
         while (true) {
             output.writeUTF(fromUser);
+
+            // Account for disconnected
             fromServer = input.readUTF();
             if (fromServer.equals("disconnected"))
                 break;
-            System.out.println("Server Response looks like: " + fromServer);
+            // Print out received data
+            System.out.println("Received: " + fromServer);
+            
             fromUser = terminalInput.readLine();
         }
         System.out.println("Closing client");

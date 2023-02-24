@@ -74,7 +74,7 @@ public class Server {
 
                 System.out.println("File Contents outputted successfully!");
 
-                output.writeBytes(readJokeFile(fileContents));
+                output.writeUTF(fileContents);
             } else if (inputLine.equals("Joke 2")) {
                 // Send back joke 2
                 String fileContents = readJokeFile("joke2.txt");
@@ -83,22 +83,22 @@ public class Server {
 
                 System.out.println("File Contents outputted successfully!");
 
-                output.writeBytes(readJokeFile(fileContents));
+                output.writeUTF(fileContents);
             } else if (inputLine.equals("Joke 3")) {
                 // Send back joke 3
-                String fileContents = readJokeFile("joke2.txt");
+                String fileContents = readJokeFile("joke3.txt");
                 // Print out the contents of the file
                 System.out.println(fileContents);
 
                 System.out.println("File Contents outputted successfully!");
 
-                output.writeBytes(readJokeFile(fileContents));
+                output.writeUTF(fileContents);
             } else if (inputLine.equals("bye")) {
                 // Break out of the infinite loop, notify the client that it can disconnect,
                 break;
             } else {
                 // Send back that there was an error
-                output.writeUTF("ERROR: Unrecognized input! Please refer to documentation");
+                output.writeUTF("ERROR: Unrecognized input! Please refer to documentation \n");
             }
         }
         // Notify the client that they've been disconnected
@@ -122,6 +122,7 @@ public class Server {
                 server.attemptConnection();
             }
         } catch(IOException error) {
+            System.out.println("There was an error with the server");
             System.out.println(error.getMessage());
         } finally {
         }
