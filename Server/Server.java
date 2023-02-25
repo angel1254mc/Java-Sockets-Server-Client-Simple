@@ -70,7 +70,7 @@ public class Server {
             // Then, based on this text, decide what to send back by checking the string
             if (inputLine.equals("Joke 1")) {
                 // Send back joke 1
-                String fileContents = readJokeFile("Server/joke1.txt");
+                String fileContents = readJokeFile("joke1.txt");
                 // Print out the contents of the file
                 System.out.println(fileContents);
 
@@ -79,7 +79,7 @@ public class Server {
                 output.writeUTF(fileContents);
             } else if (inputLine.equals("Joke 2")) {
                 // Send back joke 2
-                String fileContents = readJokeFile("Server/joke2.txt");
+                String fileContents = readJokeFile("joke2.txt");
                 // Print out the contents of the file
                 System.out.println(fileContents);
 
@@ -88,7 +88,7 @@ public class Server {
                 output.writeUTF(fileContents);
             } else if (inputLine.equals("Joke 3")) {
                 // Send back joke 3
-                String fileContents = readJokeFile("Server/joke3.txt");
+                String fileContents = readJokeFile("joke3.txt");
                 // Print out the contents of the file
                 System.out.println(fileContents);
 
