@@ -1,5 +1,9 @@
+package Client;
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * @Class Client contains all the variables and methods necessary for the functionality
@@ -28,25 +32,43 @@ public class Client {
         // the program itself ends when the server replies to a "Bye" with "disconnected"
 
         fromUser = terminalInput.readLine();
+        String currentJoke = "-1";
         while (true) {
+            
             output.writeUTF(fromUser);
-
+            if (fromUser.contains("Joke")) {
+                currentJoke = (fromUser.charAt(fromUser.length() - 1)) + "";
+            }
             // Account for disconnected
             fromServer = input.readUTF();
-            if (fromServer.equals("disconnected"))
+            if (fromServer.equals("disconnected")) {
+                System.out.println("Receive: disconnected");
                 break;
+            }
             // Print out received data
-            System.out.println("Received: " + fromServer);
+            if (fromServer.contains("ERROR")) {
+                System.out.println("Receive: " + fromServer);
+            } else if (!currentJoke.equals("-1")) {
+                System.out.println("Receive: joke" + currentJoke + ".txt");
+                writeFile(fromServer, "/joke" + currentJoke + ".txt");
+            }
             
             fromUser = terminalInput.readLine();
         }
-        System.out.println("Closing client");
+
         output.writeUTF("Client left");
+        System.out.println("Exit");
         input.close();
         output.close();
         clientSocket.close();
         System.exit(0);
     }    
+
+    void writeFile(String fileContent, String fileName) throws IOException {
+        // Writes a file to the local directory
+        Path path = Path.of(System.getProperty("user.dir") + fileName );
+        Files.writeString(path, fileContent, StandardCharsets.UTF_8);
+    }
     public static void main(String[] args) {
         try {
             Client client = new Client("localhost", 4200);
