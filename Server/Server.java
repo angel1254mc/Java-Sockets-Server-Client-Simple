@@ -100,7 +100,7 @@ public class Server {
                 break;
             } else {
                 // Send back that there was an error
-                output.writeUTF("ERROR: Unrecognized input! Please refer to documentation \n");
+                output.writeUTF("ERROR: Unrecognized input! Please refer to documentation");
             }
         }
         // Notify the client that they've been disconnected
